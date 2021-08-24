@@ -17,7 +17,8 @@
     }
   ],
   "require": {
-    "yiisoft/yii2": "*"
+    "yiisoft/yii2": "*",
+    "longhinsamuele/yii2-qr": "*"
   },
   "autoload": {
     "psr-4": {
