@@ -6,6 +6,7 @@ use Da\QrCode\QrCode;
 use samuelelonghin\qr\ModelSerializable;
 use Yii;
 use yii\base\Exception;
+use yii\db\ActiveQuery;
 
 /**
  * @property int $id
@@ -50,7 +51,8 @@ abstract class ActiveRecord extends \yii\db\ActiveRecord implements IGridActiveR
     public function generateId()
     {
         do {
-            $id = Yii::$app->security->generateRandomString(Parametro::getValoreInt(Parametro::PARAMETRO_LUNGHEZZA_ID, 10));
+            $lunghezza = Yii::$app->activerecord->getStringIdLenght();
+            $id = Yii::$app->security->generateRandomString($lunghezza);
         } while (self::findOne($id));
         $this->id = $id;
         return true;
