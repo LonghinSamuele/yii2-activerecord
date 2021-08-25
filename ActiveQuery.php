@@ -53,6 +53,14 @@ class ActiveQuery extends \yii\db\ActiveQuery implements ActiveQueryInterface
     }
 
     /**
+     * @return array
+     */
+    public function asMappedArrayId(): array
+    {
+        return array_keys($this->asMappedArrayNameId());
+    }
+
+    /**
      * @throws NotSupportedException
      * @deprecated
      */
