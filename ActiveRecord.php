@@ -6,7 +6,6 @@ use Da\QrCode\QrCode;
 use samuelelonghin\qr\ModelSerializable;
 use Yii;
 use yii\base\Exception;
-use yii\db\ActiveQuery;
 
 /**
  * @property int $id
