@@ -3,6 +3,8 @@
 
 namespace samuelelonghin\db;
 
+
+use yii\base\InvalidConfigException;
 use yii\base\NotSupportedException;
 use yii\db\ActiveQueryInterface;
 use yii\db\ActiveQueryTrait;
@@ -81,7 +83,8 @@ class ActiveQuery extends \yii\db\ActiveQuery implements ActiveQueryInterface
     public function init()
     {
         parent::init();
-        $this->from_attribute = $this->modelClass::primaryKey()[0];
+        if (!$this->modelClass::queryFrom())
+            $this->from_attribute = $this->modelClass::primaryKey()[0];
     }
 
 
@@ -119,5 +122,33 @@ class ActiveQuery extends \yii\db\ActiveQuery implements ActiveQueryInterface
         return $this;
     }
 
+
+    /**
+     * @return string|ActiveQuery query
+     */
+    protected function getQueryFrom()
+    {
+        $modelClass = $this->modelClass;
+        return $modelClass::queryFrom();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function prepare($builder)
+    {
+        if (empty($this->from)) {
+            /**
+             * this lines anable using subquery as from table
+             * It's necessary to return a subquery from ActiveRecord::getQueryFrom()
+             */
+            if ($this->getQueryFrom())
+                $this->from = [$this->getQueryFrom()];
+            else
+                $this->from = [$this->getPrimaryTableName()];
+
+        }
+        return parent::prepare($builder);
+    }
 
 }

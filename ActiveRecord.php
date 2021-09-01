@@ -76,4 +76,9 @@ abstract class ActiveRecord extends \yii\db\ActiveRecord implements IGridActiveR
     {
         return parent::hasOne($class, $link);
     }
+
+    public static function queryFrom()
+    {
+        return null;
+    }
 }
