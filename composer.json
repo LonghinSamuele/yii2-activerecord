@@ -1,5 +1,5 @@
 {
-  "name": "longhinsamuele/yii2-activerecord",
+  "name": "samuelelonghin/yii2-activerecord",
   "description": "new Yii2 ActiveRecord ",
   "type": "yii2-extension",
   "keywords": [
@@ -18,7 +18,7 @@
   ],
   "require": {
     "yiisoft/yii2": "*",
-    "longhinsamuele/yii2-qr": "*"
+    "samuelelonghin/yii2-qr": "*"
   },
   "autoload": {
     "psr-4": {
