@@ -8,7 +8,7 @@ use Yii;
 use yii\base\Exception;
 
 /**
- * @property int $id
+ * @property string $id
  * @property QrCode $qr
  * @property string $qrSvg
  */
