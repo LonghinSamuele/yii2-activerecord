@@ -3,14 +3,10 @@
 namespace samuelelonghin\db;
 
 
-interface IGridActiveRecord
+interface GridInterface extends BtnInterface
 {
 
     public static function getGridViewColumns();
-
-    public static function getController();
-
-    public function getId();
 
     public function setId($value);
 
