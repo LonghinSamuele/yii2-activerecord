@@ -12,7 +12,7 @@ use yii\base\Exception;
  * @property QrCode $qr
  * @property string $qrSvg
  */
-abstract class ActiveRecord extends \yii\db\ActiveRecord implements GridInterface,BtnInterface
+abstract class ActiveRecord extends \yii\db\ActiveRecord implements GridInterface
 {
     use ModelSerializable;
 
