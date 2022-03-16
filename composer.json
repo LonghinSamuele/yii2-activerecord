@@ -2,7 +2,7 @@
   "name": "samuelelonghin/yii2-activerecord",
   "description": "new Yii2 ActiveRecord ",
   "type": "yii2-extension",
-  "varsion":"1.1.0",
+  "varsion":"1.1.1",
   "keywords": [
     "yii2",
     "extension",

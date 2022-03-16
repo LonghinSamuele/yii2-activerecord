@@ -6,8 +6,8 @@ namespace samuelelonghin\db;
 interface BtnInterface
 {
 
-    public static function getController();
+	public static function getController();
 
-    public function getId();
+	public function getId();
 
 }
