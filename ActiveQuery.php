@@ -118,13 +118,15 @@ class ActiveQuery extends \yii\db\ActiveQuery implements ActiveQueryInterface
 
 
 	/**
-	 * @param string $attribute the attribute to list
+	 * @param string|null $attribute the attribute to list
 	 * @param string $separator
 	 * @param null $function ($value,$model,$index): string
 	 * @return string
 	 */
-	public function asStringList(string $attribute = 'nome', $separator = '<br>', $function = null): string
+	public function asStringList(?string $attribute = null, $separator = '<br>', $function = null): string
 	{
+		if (!$attribute)
+			$attribute = $this->to_attribute;
 		$text = '';
 		if ($function) {
 			foreach ($this->all() as $item) {
