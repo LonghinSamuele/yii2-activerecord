@@ -3,8 +3,10 @@
 namespace samuelelonghin\db;
 
 
+use JetBrains\PhpStorm\Pure;
 use yii\base\InvalidConfigException;
 use yii\base\NotSupportedException;
+use yii\data\ActiveDataProvider;
 use yii\db\ActiveQueryInterface;
 use yii\db\ActiveQueryTrait;
 use yii\db\ActiveRelationTrait;
@@ -13,6 +15,7 @@ use yii\helpers\ArrayHelper;
 /**
  * Class ActiveQuery
  * @package samuelelonghin\db
+ * @property-read null|string|ActiveQuery $queryFrom
  * @property ActiveRecord $modelClass
  */
 class ActiveQuery extends \yii\db\ActiveQuery implements ActiveQueryInterface
@@ -73,41 +76,12 @@ class ActiveQuery extends \yii\db\ActiveQuery implements ActiveQueryInterface
 
 	/**
 	 * @return array
-	 * @throws NotSupportedException
-	 * @deprecated
-	 */
-	public function asSelect2Value(): array
-	{
-		throw new NotSupportedException('non supportato');
-		return array_keys($this->asSelect2Array());
-	}
-
-	/**
-	 * @return array
 	 */
 	public function asMappedArrayId(): array
 	{
 		return array_keys($this->asMappedArrayNameId());
 	}
 
-	/**
-	 * @throws NotSupportedException
-	 * @deprecated
-	 */
-	private function asSelect2Array()
-	{
-		throw new NotSupportedException('non supportato, usa asMappedArrayNameId()');
-	}
-
-
-	/**
-	 * @throws NotSupportedException
-	 * @deprecated
-	 */
-	private function asSelect2Tags()
-	{
-		throw new NotSupportedException('non supportato, usa asMappedArrayNameName()');
-	}
 
 	public function init()
 	{
@@ -123,7 +97,7 @@ class ActiveQuery extends \yii\db\ActiveQuery implements ActiveQueryInterface
 	 * @param null $function ($value,$model,$index): string
 	 * @return string
 	 */
-	public function asStringList(?string $attribute = null, $separator = '<br>', $function = null): string
+	public function asStringList(?string $attribute = null, string $separator = '<br>', $function = null): string
 	{
 		if (!$attribute)
 			$attribute = $this->to_attribute;
@@ -138,6 +112,12 @@ class ActiveQuery extends \yii\db\ActiveQuery implements ActiveQueryInterface
 			}
 		}
 		return $text;
+	}
+
+	public function asDataProvider($options = []): ActiveDataProvider
+	{
+		$options['query'] = $this;
+		return new ActiveDataProvider($options);
 	}
 
 	/**
@@ -163,7 +143,7 @@ class ActiveQuery extends \yii\db\ActiveQuery implements ActiveQueryInterface
 
 
 	/**
-	 * @return string|ActiveQuery query
+	 * @return ActiveQuery|string|null query
 	 */
 	protected function getQueryFrom()
 	{
