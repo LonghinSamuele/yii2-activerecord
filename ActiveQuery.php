@@ -3,9 +3,6 @@
 namespace samuelelonghin\db;
 
 
-use JetBrains\PhpStorm\Pure;
-use yii\base\InvalidConfigException;
-use yii\base\NotSupportedException;
 use yii\data\ActiveDataProvider;
 use yii\db\ActiveQueryInterface;
 use yii\db\ActiveQueryTrait;
@@ -23,15 +20,22 @@ class ActiveQuery extends \yii\db\ActiveQuery implements ActiveQueryInterface
 	use ActiveQueryTrait;
 	use ActiveRelationTrait;
 
-	public $from_attribute = 'id';
-	public string $to_attribute = 'nome';
+	public ?string $from_attribute = 'id';
+	public ?string $to_attribute = 'nome';
 
+
+	public function init()
+	{
+		parent::init();
+		if (!$this->from_attribute && !$this->modelClass::queryFrom())
+			$this->from_attribute = $this->modelClass::primaryKey()[0];
+	}
 
 	/**
 	 * @param null $db
 	 * @return ActiveRecord[]
 	 */
-	public function all($db = null)
+	public function all($db = null): array
 	{
 		return parent::all();
 	}
@@ -40,9 +44,22 @@ class ActiveQuery extends \yii\db\ActiveQuery implements ActiveQueryInterface
 	 * @param null $db
 	 * @return ActiveRecord
 	 */
-	public function one($db = null)
+	public function one($db = null): ActiveRecord
 	{
 		return parent::one();
+	}
+
+
+	public function asMappedIdName($from = null, $to = null): ActiveQuery
+	{
+		if (!$from) $from = $this->from_attribute;
+		if (!$to) $to = $this->to_attribute;
+		return $this->select(['id' => $from, 'name' => $to])->asArray();
+	}
+
+	public function asMappedArrayIdName($from = null, $to = null): array
+	{
+		return $this->asMappedIdName($from, $to)->all();
 	}
 
 	/**
@@ -82,12 +99,12 @@ class ActiveQuery extends \yii\db\ActiveQuery implements ActiveQueryInterface
 		return array_keys($this->asMappedArrayNameId());
 	}
 
-
-	public function init()
+	public function aggregateColumn($label, $column, $group = false): self
 	{
-		parent::init();
-		if (!$this->from_attribute && !$this->modelClass::queryFrom())
-			$this->from_attribute = $this->modelClass::primaryKey()[0];
+		if ($group)
+			$this->groupBy($group);
+		$group[$label] = "group_concat( $column )";
+		return $this->addSelect($group);
 	}
 
 
