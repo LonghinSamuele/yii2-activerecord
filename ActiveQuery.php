@@ -42,9 +42,9 @@ class ActiveQuery extends \yii\db\ActiveQuery implements ActiveQueryInterface
 
 	/**
 	 * @param null $db
-	 * @return ActiveRecord
+	 * @return ActiveRecord|null
 	 */
-	public function one($db = null): ActiveRecord
+	public function one($db = null): ?ActiveRecord
 	{
 		return parent::one();
 	}
