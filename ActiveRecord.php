@@ -62,6 +62,6 @@ abstract class ActiveRecord extends \yii\db\ActiveRecord implements GridInterfac
 			return $model;
 		}
 
-		throw new NotFoundHttpException(Yii::t('app/samuelelonghin', 'The requested model does not exist.'));
+		throw new NotFoundHttpException(Yii::t('samuelelonghin/active-record', 'The requested model does not exist.'));
 	}
 }
