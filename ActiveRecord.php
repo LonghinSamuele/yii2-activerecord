@@ -2,66 +2,54 @@
 
 namespace samuelelonghin\db;
 
-use app\models\Struttura;
 use Da\QrCode\QrCode;
 use samuelelonghin\qr\ModelSerializable;
 use Yii;
-use yii\web\NotFoundHttpException;
+use yii\base\Exception;
 
 /**
  * @property string $id
  * @property QrCode $qr
  * @property string $qrSvg
  */
-abstract class ActiveRecord extends \yii\db\ActiveRecord implements GridInterface
+abstract class StringIDActiveRecord extends ActiveRecord implements GridInterface
 {
-	use ModelSerializable;
-	use UrlTrait;
+    use ModelSerializable;
 
-	/**
-	 * @return ActiveQuery
-	 */
-	public static function find()
-	{
-		return new ActiveQuery(static::class);
-	}
+    /**
+     * @throws Exception
+     */
+    public function beforeValidate()
+    {
+        if ($this->isNewRecord && !$this->id)
+            $this->generateId();
+        return parent::beforeValidate();
+    }
 
-	/**
-	 * @param string $class
-	 * @param array $link
-	 * @return ActiveQuery
-	 */
-	public function hasMany($class, $link)
-	{
-		return parent::hasMany($class, $link);
-	}
+    /**
+     * @throws Exception
+     */
+    public function beforeSave($insert)
+    {
+        if ($this->isNewRecord && !$this->id)
+            $this->generateId();
+        return parent::beforeSave($insert);
+    }
 
-	/**
-	 * @param string $class
-	 * @param array $link
-	 */
-	public function hasOne($class, $link)
-	{
-		return parent::hasOne($class, $link);
-	}
+    /**
+     * @throws Exception
+     */
+    public function generateId(): bool
+    {
+        do {
+            $length = Yii::$app->stringIdActiveRecord->getStringIdLenght(static::class);
+            $this->id = Yii::$app->security->generateRandomString($length);
+        } while (!$this->validateId());
+        return true;
+    }
 
-	public static function queryFrom()
-	{
-		return null;
-	}
-
-	/**
-	 * Finds the static model based on its primary key value (or condition).
-	 * If the model is not found, a 404 HTTP exception will be thrown.
-	 * @return static
-	 * @throws NotFoundHttpException
-	 */
-	public static function getOne($condition)
-	{
-		if (($model = static::findOne($condition)) !== null) {
-			return $model;
-		}
-
-		throw new NotFoundHttpException(Yii::t('samuelelonghin/active-record', 'The requested model does not exist.'));
-	}
+    public function validateId(): bool
+    {
+        return !self::findOne($this->id);
+    }
 }
