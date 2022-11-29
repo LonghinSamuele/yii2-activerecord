@@ -3,6 +3,7 @@
 namespace samuelelonghin\db;
 
 
+use Exception;
 use yii\data\ActiveDataProvider;
 use yii\db\ActiveQueryInterface;
 use yii\db\ActiveQueryTrait;
@@ -145,6 +146,14 @@ class ActiveQuery extends \yii\db\ActiveQuery implements ActiveQueryInterface
     {
         $this->multiple = $value;
         return $this;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function get($select, $default = null) 
+    {
+        return ArrayHelper::getValue($this->select($select)->asArray()->one(), $select, $default);
     }
 
     /**
