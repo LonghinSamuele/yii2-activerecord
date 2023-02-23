@@ -11,7 +11,7 @@ use yii\base\Exception;
  * @property string $id
  * @property QrCode $qr
  * @property string $qrSvg
- */
+ */ 
 abstract class StringIDActiveRecord extends ActiveRecord implements GridInterface
 {
     use ModelSerializable;
