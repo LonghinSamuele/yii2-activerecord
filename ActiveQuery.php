@@ -119,17 +119,17 @@ class ActiveQuery extends \yii\db\ActiveQuery implements ActiveQueryInterface
     {
         if (!$attribute)
             $attribute = $this->to_attribute;
-        $text = '';
+        $values = [];
         if ($function) {
             foreach ($this->all() as $item) {
-                $text .= call_user_func($function, $item->$attribute, $item, $item->id) . $separator;
+                $values[] = call_user_func($function, $item->$attribute, $item, $item->id);
             }
         } else {
             foreach ($this->all() as $item) {
-                $text .= $item->$attribute . $separator;
+                $values[] = $item->$attribute;
             }
         }
-        return $text;
+        return implode($separator, $values);
     }
 
     public function asDataProvider($options = []): ActiveDataProvider
@@ -151,7 +151,7 @@ class ActiveQuery extends \yii\db\ActiveQuery implements ActiveQueryInterface
     /**
      * @throws Exception
      */
-    public function get($select, $default = null) 
+    public function get($select, $default = null)
     {
         return ArrayHelper::getValue($this->select($select)->asArray()->one(), $select, $default);
     }
