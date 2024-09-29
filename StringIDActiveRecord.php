@@ -16,6 +16,8 @@ abstract class StringIDActiveRecord extends ActiveRecord implements GridInterfac
 {
     use ModelSerializable;
 
+    protected $stringIdLength = 10;
+
     /**
      * @throws Exception
      */
@@ -42,7 +44,7 @@ abstract class StringIDActiveRecord extends ActiveRecord implements GridInterfac
     public function generateId(): bool
     {
         do {
-            $length = Yii::$app->stringIdActiveRecord->getStringIdLenght(static::class);
+            $length = $this->stringIdLength;
             $this->id = Yii::$app->security->generateRandomString($length);
         } while (!$this->validateId());
         return true;
