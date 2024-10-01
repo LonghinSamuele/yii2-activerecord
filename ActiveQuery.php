@@ -21,8 +21,8 @@ class ActiveQuery extends \yii\db\ActiveQuery implements ActiveQueryInterface
     use ActiveQueryTrait;
     use ActiveRelationTrait;
 
-    public ?string $from_attribute = 'id';
-    public ?string $to_attribute = 'nome';
+    public string $from_attribute = 'id';
+    public string $to_attribute = 'nome';
 
 
     public function init()
